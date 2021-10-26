@@ -10,7 +10,7 @@ export const client = axios.create({
     headers: {
         'Accept': 'application/json',
         'Client-ID': '#',
-        'Authorization': 'Bearer maw1s9z4czq0q4k5uds8fdmvze4usa',
+        'Authorization': 'Bearer #',
     },
 })
 
