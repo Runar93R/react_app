@@ -1,0 +1,206 @@
+.App {
+  text-align: center;
+  padding-top: 2px;
+}
+
+.bg-myBgBg {
+  background-color: rgb(15, 15, 19) !important;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: auto;
+}
+
+.something {
+  overflow: auto !important;
+  position: relative !important;
+}
+
+.something::before {
+  height : 35vh;
+  content: "" !important;
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: -1 !important;
+
+  display: block !important;
+  width: 100% !important;
+  -webkit-filter: blur(5px) !important;
+  -ms-filter: blur(5px) !important;
+  filter : blur(5px) !important;
+}
+
+.header_img {
+  max-height: 500px;
+  max-width: 400px;
+}
+
+.myCard {
+  background-color: black !important;
+  color: white !important;
+}
+
+.bg-myDark {
+  background-color: hsl(0, 20%, 3%);
+}
+
+.bg-myBg {
+  background-color: rgb(28, 28, 31) !important;
+}
+
+.bg-myGrad {
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,0,0,0.8155462868741247) 35%, rgba(0,0,0,0.12366953617384457) 100%);
+}
+
+/** NAVBAR **/
+Nav {
+  max-height: 70px;
+  font-size: 17px;
+}
+
+.bg-myBlack{
+  background : #343a40;
+}
+
+.navbar-nav .dropdown-menu {
+  text-align: center;
+}
+
+.navbar-collapse {
+  background : #343a40;
+}
+
+.nav-link {
+  padding-left: 17px!important;
+  padding-right: 17px!important;
+}
+
+/**  SEARCH OVERLAY **/
+.search {
+  background-color: black;
+}
+
+.search-link {
+  text-decoration: none;
+}
+
+.form-control {
+  width: 50%
+}
+
+.search-cover {
+  max-height: 70px;
+}
+
+.table-responsive {
+  font-size: 15px;
+  padding-top: 6px;
+}
+
+
+.table td {
+  padding-top: .10rem;
+  padding-bottom: .10rem;
+  vertical-align: middle;
+}
+
+/**
+GAMES
+**/
+.accordion-body {
+  padding: 0 !important;
+}
+
+.accordion-body a {
+  text-decoration: none;
+  padding: 8px;
+}
+
+.active a {
+  background-color: #0d6efd;
+  color: white;
+  text-decoration: none;
+}
+
+.active a:hover {
+  color: bisque;
+}
+
+.gamelink {
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.Games-main-card {
+  width: 100px;
+  height: 230px;
+}
+
+.Games-img {
+  width: 100px;
+  max-height: 200px;
+  height: auto;
+}
+
+/**
+GameDetails
+**/
+.sim_cover {
+  max-width: 50px;
+}
+
+.cover {
+  max-width: 60px;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@media screen and (max-width: 800px) {
+
+  #header {
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    height: 30vh !important;
+  }
+
+
+  #coverCard {
+    width: 40vw !important;
+    position: relative !important;
+    top: 0 !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
