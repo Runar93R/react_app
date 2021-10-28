@@ -198,7 +198,7 @@ const ExampleGame = () => {
                                     <>
                                         <h4>DLCs & Expansions: </h4>
                                         {game.dlcs.map(dlc => (
-                                            <Col className="text-center border border-dark">
+                                            <Col className="text-center">
                                                 <Image src={dlc.cover.url && resize(dlc.cover.url)}
                                                        style={{width : "100px", height : "130px"}}
                                                 />
