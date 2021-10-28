@@ -2,24 +2,24 @@ import axios from "axios";
 import {useEffect, useState} from "react";
 
 /***
- * New client instance to request API data
+ * New client instance for HTTP requests.
  * @type {AxiosInstance} instance of client
  */
 export const client = axios.create({
     dataType: 'JSON',
     headers: {
         'Accept': 'application/json',
-        'Client-ID': '#',
-        'Authorization': 'Bearer #',
+        'Client-ID': 'zxwce2r3f2k88ilzqci0bugim0bh4c',
+        'Authorization': 'Bearer maw1s9z4czq0q4k5uds8fdmvze4usa',
     },
 })
 
 
 /**
- * Adds data from API request to state
+ * Adds data from HTTP request to state
  * @param url url of request
- * @param fields fields from dataset
- * @returns {{data: *[], setData: (value: (((prevState: *[]) => *[]) | *[])) => void}}
+ * @param fields fields in JSON
+ * @returns {{data: *[], setData: (value: (((prevState: *[]) => *[]) | *[])) => void}} Object of data
  */
 export const useClient = (url, fields) => {
 
@@ -37,10 +37,10 @@ export const useClient = (url, fields) => {
 }
 
 /**
- * Adds data of the first object from request to state
+ * Adds data from a single object from HTTP request to state
  * @param url url of request
- * @param fields fields from dataset
- * @returns {{data: *[], setData: (value: (((prevState: *[]) => *[]) | *[])) => void}}
+ * @param fields fields in JSON
+ * @returns {{data: *[], setData: (value: (((prevState: *[]) => *[]) | *[])) => void}} Object of data
  */
 export const useClientData = (url, fields) => {
 
@@ -59,7 +59,7 @@ export const useClientData = (url, fields) => {
 
 /**
  * All relevant fields available for a game
- * @type {string} name of fields
+ * @type {string} name of all fields
  */
 export const allFields =
     "f alternative_names.*, artworks.url, aggregated_rating, aggregated_rating_count, age_ratings.rating," +

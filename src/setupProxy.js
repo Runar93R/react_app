@@ -2,7 +2,7 @@ const {createProxyMiddleware} = require('http-proxy-middleware');
 const morgan = require('morgan');
 
 /**
- * Sets up proxy middleware to avoid CORS and limited request
+ * Sets up proxy middleware to avoid CORS and limited requests.
  * @param app
  */
 module.exports = function (app) {

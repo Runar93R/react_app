@@ -136,8 +136,7 @@ const GameData = () => {
 
                             {/** Summary and storyline **/}
                             <Row className="mb-5 px-4">
-                                <h4>Summary</h4>
-                                <article>{game.summary && game.summary}</article>
+                                <>{game.storyline && (<Col> <h4>Storyline </h4> {game.storyline} </Col>)}</>
                             </Row>
 
                             <Row className="mb-5 px-4">

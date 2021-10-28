@@ -7,6 +7,15 @@
   background-color: rgb(15, 15, 19) !important;
 }
 
+
+.bg-myPill {
+  background-image: linear-gradient(to right, #ff512f, #f09819);
+}
+
+.bg-myRating{
+  background-image: linear-gradient(to right, #5a3f37, #2c7744);
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: auto;
