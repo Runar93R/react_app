@@ -5,8 +5,9 @@ import {
     convertScore,
     convertTime, logo_resize,
     resize,
-    screenshotResize, sortData
+    screenshotResize
 } from "../utilities/converters";
+
 import {
     Badge,
     Card,
@@ -19,7 +20,6 @@ import {
 } from "react-bootstrap";
 import {Link} from "react-router-dom";
 
-
 /**
  * Renders single game object for testing purpose
  * @returns {JSX.Element}
@@ -27,7 +27,7 @@ import {Link} from "react-router-dom";
  */
 const ExampleGame = () => {
 
-    const {data: game} = useClientData('/games', allFields + 'w id=1877;')
+    const {data: game} = useClientData('/games', allFields + 'w id=1877;') //19565
 
     checkData(game)
 
@@ -46,7 +46,7 @@ const ExampleGame = () => {
                             : null
                         })`,
                         backgroundSize: "cover",
-                        height: "30vh",
+                        height: "35vh",
                         boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.7)", color : "white",
                     }}>
 
@@ -107,22 +107,27 @@ const ExampleGame = () => {
                                 <Col className="align-self-center">
                                     <svg>
                                         <defs>
-                                            <radialGradient id="myGradient">
-                                                <stop offset="10%" stopColor="#141e30" />
-                                                <stop offset="90%" stopColor="black" />
-                                            </radialGradient>
+
+                                            <linearGradient id="medium" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="8%" stopColor="#fca746" stopOpacity="1" />
+                                                <stop offset="73%" stopColor="#f9dc5c" stopOpacity="1" />
+                                            </linearGradient>
+
+                                            <linearGradient id="best" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="27%" stopColor="#4eecbb" stopOpacity="1" />
+                                                <stop offset="73%" stopColor="#69fc46" stopOpacity="1" />
+                                            </linearGradient>
                                         </defs>
                                         <circle cx="70" cy="70" r="70"
                                                 stroke="white"
-                                                strokeWidth="2"
-                                                fill="url(#myGradient)"
+                                                strokeWidth="1"
+                                                style={{fill : (game.aggregated_rating >= 87) ? "url(#best)" : "url(#medium)"}}
                                         />
                                         <text x="70" y="90"
                                               textAnchor="middle"
-                                              fontSize="25px"
+                                              fontSize="30px"
                                               fill="white"
                                               alignmentBaseline="middle">
-
                                             <tspan y="70">{game.aggregated_rating && convertScore(game.aggregated_rating)}</tspan>
                                             <tspan fontSize="14px" x="70" dy="2em">{game.aggregated_rating_count && game.aggregated_rating_count} votes</tspan>
                                         </text>
@@ -149,29 +154,33 @@ const ExampleGame = () => {
                     {/** Main Page **/}
                     <Col md={8} className="px-0">
 
-                        <Row className="text-sm-start" style={{fontSize: "16px"}}>
+                        <Row className="text-sm-start pt-2" style={{fontSize: "16px"}}>
+
+
 
                             {/** DLCs **/}
-                            <Row className="mb-2">
-                                {game.dlcs && (
+
+                            {game.dlcs && (
+                                <Row className="mb-2">
                                     <Card>
-                                    <Row className="p-3">
-                                        <h4>DLCs & Expansions </h4>
-                                        {game.dlcs.map(dlc => (
-                                            <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
-                                                <Link to={`/game/id/${dlc.id}`}>
-                                                <Card.Img style={{height : "170px"}} src={dlc.cover && resize(dlc.cover.url)}
-                                                />
-                                                <Card.Body className="p-1">
-                                                    <Card.Text style={{fontSize : "12px"}}>{dlc.name}</Card.Text>
-                                                </Card.Body>
-                                                </Link>
-                                            </Card>
-                                        ))}
-                                    </Row>
+                                        <Row className="p-3">
+                                            <h4>DLCs & Expansions </h4>
+                                            {game.dlcs.map(dlc => (
+                                                <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
+                                                    <Link to={`/game/id/${dlc.id}`}>
+                                                        <Card.Img style={{height : "170px"}} src={dlc.cover && resize(dlc.cover.url)}
+                                                        />
+                                                        <Card.Body className="p-1">
+                                                            <Card.Text style={{fontSize : "12px"}}>{dlc.name}</Card.Text>
+                                                        </Card.Body>
+                                                    </Link>
+                                                </Card>
+                                                ))}
+                                        </Row>
                                     </Card>
-                                )}
-                            </Row>
+                                    </Row>
+                            )}
+
 
                             {/** Summary and storyline **/}
                             <Row className="mb-2">
@@ -224,9 +233,9 @@ const ExampleGame = () => {
 
 
                     {/** Sidebar **/}
-                    <Col md={4} className="px-0" style={{fontSize: "1rem"}}>
+                    <Col md={4} className="px-0 py-2" style={{fontSize: "1rem"}}>
 
-                        <Card className="py-2">
+                        <Card className="">
                             <Row>
                                 <Col md={4} className="text-black-50 border-end my-3">Platforms</Col>
 
@@ -270,6 +279,30 @@ const ExampleGame = () => {
                                                     <p className="">{date.platform.name}: {date.human} </p>
                                                 </Row>
                                             ))}
+                                </Col>
+                            </Row>
+                        </Card>
+
+
+                        <Card>
+                            <Row>
+                                <Col md={4} className="text-black-50 border-end">Age Ratings</Col>
+
+                                <Col>
+                                    {game.age_ratings && game.age_ratings.map(age => (
+                                        <Col className="p-2 text-end">
+                                            <Image style={{height: "50px", width: "40px"}} src={convertAge(age.rating)}/>
+                                        </Col>
+                                    ))}
+                                    <>
+                                        {game.age_ratings && game.age_ratings.map(age => (
+                                            <Col>
+                                                {age.content_descriptions && age.content_descriptions.map(desc => (
+                                                    <p>{desc.description}</p>
+                                                ))}
+                                            </Col>
+                                        ))}
+                                        </>
                                 </Col>
                             </Row>
                         </Card>
@@ -395,7 +428,9 @@ const ExampleGame = () => {
 
 
         </div>
+
     )
 }
+
 
 export default ExampleGame;

@@ -13,6 +13,10 @@ export const convertTime = (input) => {
     }
 }
 
+export const convertRatingColor = (input) => {
+
+}
+
 /**
  * Converts ratings score to float with two decimals
  * @param input initial score
