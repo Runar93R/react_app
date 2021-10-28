@@ -104,7 +104,7 @@ export const Home = () => (
                         <Card>
                             <Card.Body>
                                 <Row>
-                                    <Col className="text-black-50">Genres</Col>
+                                    <Col className="text-black-50 ">Genres</Col>
 
                                     <Col>
                                         <p>Shooter</p>

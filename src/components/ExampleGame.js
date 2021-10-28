@@ -3,9 +3,9 @@ import {
     checkData,
     convertAge,
     convertScore,
-    convertTime,
+    convertTime, logo_resize,
     resize,
-    screenshotResize
+    screenshotResize, sortData
 } from "../utilities/converters";
 import {
     Badge,
@@ -27,7 +27,7 @@ import {Link} from "react-router-dom";
  */
 const ExampleGame = () => {
 
-    const {data: game} = useClientData('/games', allFields + 'w id=19441;')
+    const {data: game} = useClientData('/games', allFields + 'w id=1877;')
 
     checkData(game)
 
@@ -39,14 +39,14 @@ const ExampleGame = () => {
             <Container fluid>
 
                 {/** Header image **/}
-                <Row className="align-items-center"
+                <Row className="align-items-center mb-2"
                     style={{
                         backgroundImage: `url(https:${game.screenshots 
                             ? screenshotResize(game.screenshots[0].url) 
                             : null
                         })`,
                         backgroundSize: "cover",
-                        height: "35vh",
+                        height: "30vh",
                         boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.7)", color : "white",
                     }}>
 
@@ -68,7 +68,7 @@ const ExampleGame = () => {
                                            }}/>
                                 </Col>
 
-                                <Col md={8} className="text-start">
+                                <Col md={7} className="text-start">
 
                                     <Row className="pb-3">
                                         <span style={{
@@ -112,19 +112,19 @@ const ExampleGame = () => {
                                                 <stop offset="90%" stopColor="black" />
                                             </radialGradient>
                                         </defs>
-                                        <circle cx="80" cy="80" r="70"
+                                        <circle cx="70" cy="70" r="70"
                                                 stroke="white"
                                                 strokeWidth="2"
                                                 fill="url(#myGradient)"
                                         />
-                                        <text x="80" y="90"
+                                        <text x="70" y="90"
                                               textAnchor="middle"
                                               fontSize="25px"
                                               fill="white"
                                               alignmentBaseline="middle">
 
-                                            <tspan y="80">{game.aggregated_rating && convertScore(game.aggregated_rating)}</tspan>
-                                            <tspan fontSize="14px" x="80" dy="2em">{game.aggregated_rating_count && game.aggregated_rating_count} votes</tspan>
+                                            <tspan y="70">{game.aggregated_rating && convertScore(game.aggregated_rating)}</tspan>
+                                            <tspan fontSize="14px" x="70" dy="2em">{game.aggregated_rating_count && game.aggregated_rating_count} votes</tspan>
                                         </text>
                                     </svg>
 
@@ -140,213 +140,235 @@ const ExampleGame = () => {
 
 
             {/** Cover, Title, Date, Genres, Plats **/}
-            <Container className="bg-white">
-
-                {/*/!** Header **!/*/}
-                {/*<Row className="mt-0 bg-myDark text-white p-3">*/}
-                {/*    <Col md={"auto"}>*/}
-                {/*        <Image fluid src={resize(game.cover.url && game.cover.url)} rounded*/}
-                {/*               style={{*/}
-                {/*                   marginBottom: "10px",*/}
-                {/*                   boxShadow : "4px 2px 2px 2px black",*/}
-                {/*                   WebkitBoxShadow :"2px 2px 2px 2px black",*/}
-                {/*                   border : "0.5px solid white",*/}
-                {/*                   height: "25vh"}}/>*/}
-                {/*    </Col>*/}
-
-
-                {/*    <Col md={8} className="text-sm-start px-3">*/}
-
-                {/*        <Row className="border-bottom mb-2">*/}
-                {/*            <h1 style={{fontSize : "2.5vw"}}>*/}
-                {/*                {game.name}*/}
-                {/*            </h1>*/}
-                {/*        </Row>*/}
-
-                {/*        <Row className="mb-2">*/}
-                {/*            <h6>First Released: {game.first_release_date && convertTime(game.first_release_date)}</h6>*/}
-                {/*        </Row>*/}
-
-                {/*        <Row className="mb-3">*/}
-                {/*            <Col>*/}
-                {/*                {game.genres && game.genres.map(genres => (*/}
-                {/*                    <Badge pill className="bg-myGrad" style={{fontSize : "1vmin", padding : "10px", marginRight : "14px"}}>{genres.name}</Badge>*/}
-                {/*                ))}*/}
-                {/*            </Col>*/}
-                {/*        </Row>*/}
-
-                {/*        <Row className="mt-4">*/}
-                {/*            <Col>Rating: {game.aggregated_rating && game.aggregated_rating}</Col>*/}
-                {/*        </Row>*/}
-
-                {/*    </Col>*/}
-
-                {/*</Row>*/}
+            <Container className="bg-transparent">
 
 
                 {/** Summary and Sidebar **/}
-                <Row className="mt-1">
+                <Row>
 
                     {/** Main Page **/}
-                    <Col md={8}>
+                    <Col md={8} className="px-0">
 
-                        <Row className="text-sm-start pt-4" style={{fontSize: "16px"}}>
+                        <Row className="text-sm-start" style={{fontSize: "16px"}}>
 
                             {/** DLCs **/}
-                            <Row className="mb-2 px-4">
+                            <Row className="mb-2">
                                 {game.dlcs && (
-                                    <>
-                                        <h4>DLCs & Expansions: </h4>
+                                    <Card>
+                                    <Row className="p-3">
+                                        <h4>DLCs & Expansions </h4>
                                         {game.dlcs.map(dlc => (
-                                            <Col className="text-center">
-                                                <Image src={dlc.cover.url && resize(dlc.cover.url)}
-                                                       style={{width : "100px", height : "130px"}}
+                                            <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
+                                                <Link to={`/game/id/${dlc.id}`}>
+                                                <Card.Img style={{height : "170px"}} src={dlc.cover && resize(dlc.cover.url)}
                                                 />
-                                                <p style={{fontSize : "12px"}}>{dlc.name}</p>
-                                            </Col>
+                                                <Card.Body className="p-1">
+                                                    <Card.Text style={{fontSize : "12px"}}>{dlc.name}</Card.Text>
+                                                </Card.Body>
+                                                </Link>
+                                            </Card>
                                         ))}
-                                    </>
+                                    </Row>
+                                    </Card>
                                 )}
                             </Row>
 
                             {/** Summary and storyline **/}
-                            <Row className="mb-5 px-4">
-                                <>{game.storyline && (<Col> <h4>Storyline </h4> {game.storyline} </Col>)}</>
+                            <Row className="mb-2">
+                                <Card>{game.summary && (<Col className="p-3"> <h4>Summary </h4> {game.summary} </Col>)}</Card>
                             </Row>
 
-                            <Row className="mb-5 px-4">
-                                <>{game.storyline && (<Col> <h4>Storyline </h4> {game.storyline} </Col>)}</>
+                            <Row className="mb-2">
+                                <Card>{game.storyline && (<Col className="p-3"><h4>Storyline </h4> {game.storyline} </Col>)}</Card>
                             </Row>
 
-                        </Row>
 
                         {/** Screenshots **/}
                         <Row>
 
-                            <Col>
-                                <Card>
-                                    <span className="bg-dark text-white fs-5">Screenshots</span>
-                                    <Carousel>
-                                        {game.screenshots && game.screenshots.map(image => (
-                                            <CarouselItem>
-                                                <Image src={image.url && screenshotResize(image.url)} fluid/>
-                                            </CarouselItem>
-                                        ))}
-                                    </Carousel>
-                                </Card>
-                            </Col>
-                        </Row>
+                                {game.screenshots && (
+                                    <Card>
+                                <Col>
+                                <h4>Images</h4>
+
+                                <Carousel>
+                                    {game.screenshots.map(image => (
+                                        <CarouselItem>
+                                            <Image src={image.url && screenshotResize(image.url)} fluid/>
+                                        </CarouselItem>
+                                    ))}
+                                </Carousel>
+                                </Col>
+
 
                         {/** Artworks **/}
-                        <Row className="mt-3 p-2">
+
+                                <Row className="px-4 mt-3">
                             {game.artworks && game.artworks.map(art => (
-                                <Col md={4} className="m-1 p-1">
+                                <Col md="auto" className="p-1">
                                     <Image
                                         src={art.url && resize(art.url)}
-                                        style={{ width : "150px"}}
+                                        style={{ width : "250px"}}
                                     />
                                 </Col>
                             ))}
+                                </Row>
+                        </Card>
+                                )}
                         </Row>
+
+                        </Row>
+
 
                     </Col>
 
 
                     {/** Sidebar **/}
-                    <Col md className="p-3" style={{marginLeft: "2%", fontSize: "1rem"}}>
+                    <Col md={4} className="px-0" style={{fontSize: "1rem"}}>
 
+                        <Card className="py-2">
+                            <Row>
+                                <Col md={4} className="text-black-50 border-end my-3">Platforms</Col>
 
-                        {/** Platforms **/}
-                        <Row className="border">
-                            <Col className="text-start border-end">Platforms</Col>
-                            <Col className="text-end">
-                                {game.platforms && game.platforms.map(platforms => (
-                                    <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>
-                                        <p>{platforms.name} </p>
-                                    </Link>
-                                ))}
-                            </Col>
-                        </Row>
+                                <Col className="text-start px-4">
+                                    {game.platforms && game.platforms.map(platforms => (
+                                                <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>
+                                                    <Row className="my-3">
+                                                        <Col md="auto">
+                                                            <Image style={{width : "35px"}} src={platforms.platform_logo && logo_resize(platforms.platform_logo.url)}/>
+                                                        </Col>
 
-                        {/** Detailed release dates **/}
-                        <Row className="border">
-                            <Col className="text-start border-end">Release Dates</Col>
-                            <Col className="text-start">
-                                {game.release_dates && game.release_dates.map(date => (
-                                    <Row className="pb-4">
-                                        <Col>{date.m}/{date.y} </Col>
-                                        <Col>{date.platform.name}</Col>
-                                    </Row>
-                                ))}
-                            </Col>
-                        </Row>
-
-                        {/** Developers **/}
-                        <Row className="border">
-                            <Col className="text-start border-end">Developers</Col>
-                            <Col className="text-end">
-                                {game.involved_companies && game.involved_companies.map(companies => (
-                                    <p>{companies.company.name}</p>
-                                ))}
-
-                            </Col>
-                        </Row>
-
-                        {/** Age ratings **/}
-                        <Row className="mt-2 mb-2 border">
-                            <Col className="text-start border-end">Age Ratings</Col>
-                            <Col>
-                                {game.age_ratings && game.age_ratings.map(age => (
-                                    <Col className="p-2 text-end">
-                                        <Image style={{height: "50px", width: "40px"}} src={convertAge(age.rating)}/>
-                                    </Col>
-                                ))}
-                                <>
-                                    {game.age_ratings && game.age_ratings.map(age => (
-                                        <Col className="text-end">
-                                            {age.content_descriptions && age.content_descriptions.map(desc => (
-                                                <p>{desc.description}</p>
+                                                        <Col>
+                                                            <p>{platforms.name} </p>
+                                                        </Col>
+                                                    </Row>
+                                                </Link>
                                             ))}
-                                        </Col>))}
-                                </>
-                            </Col>
-                        </Row>
+                                </Col>
+                            </Row>
+                        </Card>
 
-                        {/** Player perspectives and game modes **/}
-                        <Row className="border">
+                        <Card className="mt-2 py-2">
                             <Row>
-                                <Col className="text-start border-end">Perspectives</Col>
-                                <Col className="text-end p-0">
-                                    {game.player_perspectives && game.player_perspectives.map(pp => (
-                                        <p>{pp.name}</p>
+                                <Col md={4} className="text-black-50 border-end">Developers</Col>
+
+                                <Col className="text-start px-4">
+                                    {game.involved_companies && game.involved_companies.map(companies => (
+                                        <p>{companies.company.name}</p>
                                     ))}
                                 </Col>
                             </Row>
+                        </Card>
 
+                        <Card className="mt-2 py-2">
                             <Row>
+                                <Col md={4} className="text-black-50 border-end">Release Dates</Col>
 
-                                <Col className="text-start border-end">Game Modes</Col>
-                                <Col className="text-end p-0">
-                                    {game.game_modes && game.game_modes.map(gm => (
-                                        <p>{gm.name}</p>
-                                    ))}
+                                <Col className="text-start px-4">
+                                    {game.release_dates && game.release_dates.map(date => (
+                                                <Row className="pb-2">
+                                                    <p className="">{date.platform.name}: {date.human} </p>
+                                                </Row>
+                                            ))}
                                 </Col>
                             </Row>
+                        </Card>
 
-                        </Row>
 
-                        {/** Franchises **/}
-                        {game.franchises && (
-                            <Row className="pt-3 mt-3 border">
-                                <Col className="text-start">Franchises</Col>
-                                <Col className="text-end">
-                                    {game.franchises.map(fr => (
-                                        <p>{fr.name}</p>
-                                    ))}
-                                </Col>
-                            </Row>
-                        )}
+                        {/*/!** Platforms **!/*/}
+                        {/*<Row className="px-2">*/}
+                        {/*    <Col className="text-start border-end">Platforms</Col>*/}
+                        {/*    <Col className="text-end">*/}
+                        {/*        {game.platforms && game.platforms.map(platforms => (*/}
+                        {/*            <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>*/}
+                        {/*                <p>{platforms.name} </p>*/}
+                        {/*            </Link>*/}
+                        {/*        ))}*/}
+                        {/*    </Col>*/}
+                        {/*</Row>*/}
+
+                        {/*/!** Detailed release dates **!/*/}
+                        {/*    <Row className="px-2">*/}
+                        {/*    <Col className="text-start border-end">Release Dates</Col>*/}
+                        {/*    <Col className="text-start">*/}
+                        {/*        {game.release_dates && game.release_dates.map(date => (*/}
+                        {/*            <Row className="pb-4">*/}
+                        {/*                <Col>{date.m}/{date.y} </Col>*/}
+                        {/*                <Col>{date.platform.name}</Col>*/}
+                        {/*            </Row>*/}
+                        {/*        ))}*/}
+                        {/*    </Col>*/}
+                        {/*</Row>*/}
+
+                        {/*/!** Developers **!/*/}
+                        {/*    <Row className="border px-2">*/}
+                        {/*    <Col className="text-start border-end">Developers</Col>*/}
+                        {/*    <Col className="text-end">*/}
+                        {/*        {game.involved_companies && game.involved_companies.map(companies => (*/}
+                        {/*            <p>{companies.company.name}</p>*/}
+                        {/*        ))}*/}
+
+                        {/*    </Col>*/}
+                        {/*</Row>*/}
+
+                        {/*/!** Age ratings **!/*/}
+                        {/*<Row className="mt-2 mb-2 border">*/}
+                        {/*    <Col className="text-start border-end">Age Ratings</Col>*/}
+                        {/*    <Col>*/}
+                        {/*        {game.age_ratings && game.age_ratings.map(age => (*/}
+                        {/*            <Col className="p-2 text-end">*/}
+                        {/*                <Image style={{height: "50px", width: "40px"}} src={convertAge(age.rating)}/>*/}
+                        {/*            </Col>*/}
+                        {/*        ))}*/}
+                        {/*        <>*/}
+                        {/*            {game.age_ratings && game.age_ratings.map(age => (*/}
+                        {/*                <Col className="text-end">*/}
+                        {/*                    {age.content_descriptions && age.content_descriptions.map(desc => (*/}
+                        {/*                        <p>{desc.description}</p>*/}
+                        {/*                    ))}*/}
+                        {/*                </Col>))}*/}
+                        {/*        </>*/}
+                        {/*    </Col>*/}
+                        {/*</Row>*/}
+
+                        {/*/!** Player perspectives and game modes **!/*/}
+                        {/*<Row className="border">*/}
+                        {/*    <Row>*/}
+                        {/*        <Col className="text-start border-end">Perspectives</Col>*/}
+                        {/*        <Col className="text-end p-0">*/}
+                        {/*            {game.player_perspectives && game.player_perspectives.map(pp => (*/}
+                        {/*                <p>{pp.name}</p>*/}
+                        {/*            ))}*/}
+                        {/*        </Col>*/}
+                        {/*    </Row>*/}
+
+                        {/*    <Row>*/}
+
+                        {/*        <Col className="text-start border-end">Game Modes</Col>*/}
+                        {/*        <Col className="text-end p-0">*/}
+                        {/*            {game.game_modes && game.game_modes.map(gm => (*/}
+                        {/*                <p>{gm.name}</p>*/}
+                        {/*            ))}*/}
+                        {/*        </Col>*/}
+                        {/*    </Row>*/}
+
+                        {/*</Row>*/}
+
+                        {/*/!** Franchises **!/*/}
+                        {/*{game.franchises && (*/}
+                        {/*    <Row className="pt-3 mt-3 border">*/}
+                        {/*        <Col className="text-start">Franchises</Col>*/}
+                        {/*        <Col className="text-end">*/}
+                        {/*            {game.franchises.map(fr => (*/}
+                        {/*                <p>{fr.name}</p>*/}
+                        {/*            ))}*/}
+                        {/*        </Col>*/}
+                        {/*    </Row>*/}
+                        {/*)}*/}
+
+                        {/*</Card>*/}
                     </Col>
+
                 </Row>
 
 
