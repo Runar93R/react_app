@@ -220,3 +220,57 @@ export const convertPlatformCategory = (input) => {
     }
 }
 
+export const convertCategory = (input) => {
+    if (input === 0) {
+        return "Main Game";
+    }
+
+    if (input === 1) {
+        return "DLC addon";
+    }
+
+    if (input === 2) {
+        return "Expansion";
+    }
+
+    if (input === 3) {
+        return "Bundle";
+    }
+
+    if (input === 4) {
+        return "Standalone Expansion";
+    }
+
+    if (input === 5) {
+        return "Mod";
+    }
+
+    if (input === 6) {
+        return "Episode";
+    }
+
+    if (input === 7) {
+        return "Season";
+    }
+
+    if (input === 8) {
+        return "Remake";
+    }
+
+    if (input === 9) {
+        return "Remaster";
+    }
+
+    if (input === 10) {
+        return "Expanded Game";
+    }
+
+    if (input === 11) {
+        return "Port";
+    }
+
+    if (input === 12) {
+        return "Fork";
+    }
+}
+

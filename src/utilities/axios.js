@@ -63,8 +63,8 @@ export const useClientData = (url, fields) => {
  */
 export const allFields =
     "f alternative_names.*, artworks.url, aggregated_rating, aggregated_rating_count, age_ratings.rating," +
-    "age_ratings.content_descriptions.description, cover.url, category, " +
-    "dlcs.*, dlcs.cover.*, first_release_date, franchises.name, game_modes.name, genres.name," +
+    "age_ratings.content_descriptions.description, cover.url, category, collection.*, collection.games.*," +
+    "collection.games.cover.*, dlcs.*, dlcs.cover.*, first_release_date, franchises.name, game_modes.name, genres.name," +
     "id, involved_companies.company.name, name, platforms.name," +
     "platforms.abbreviation, platforms.platform_logo.url, platforms.slug," +
     "player_perspectives.name, release_dates.*, release_dates.platform.*," +
