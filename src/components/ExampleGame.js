@@ -10,9 +10,10 @@ import {
     screenshotResize
 } from "../utilities/converters";
 
-import {MyCard} from "./MyCard";
+import {MainCard, MetaCard, MyCard} from "./MyCards";
 
 import {
+    Accordion,
     Badge,
     Card, CardGroup, CardImg,
     Carousel,
@@ -36,7 +37,7 @@ import {FaCalendarAlt, FaNetworkWired, FaStreetView, FaTheaterMasks} from "react
  */
 const ExampleGame = () => {
 
-    const {data: game} = useClientData('/games', allFields + 'w id=1877;') //19565
+    const {data: game} = useClientData('/games', allFields + 'w id=546;') //19565
 
     checkData(game)
 
@@ -74,8 +75,8 @@ const ExampleGame = () => {
                                                marginBottom: "10px",
                                                boxShadow: "4px 2px 2px 2px black",
                                                WebkitBoxShadow: "2px 2px 2px 2px black",
-                                               border: "0.5px solid white",
-                                               height: "25vh"
+                                               border: "0.7px solid white",
+                                               height: "30vh"
                                            }}/>
                                 </Col>
 
@@ -84,18 +85,18 @@ const ExampleGame = () => {
                                     <Row className="pb-3 mb-4">
                                         <span style={{
                                             textShadow: "2px 2px #000000",
-                                            fontSize: "2.3vmax",
+                                            fontSize: "2.5vmax",
                                       }}>{game.name}</span>
                                     </Row>
 
                                     {/** First release date **/}
                                     {game.first_release_date && (
-                                    <Badge className="p-2 shadow" style={{fontSize : "1vmin"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
+                                    <Badge className="p-2 shadow" style={{fontSize : "1vmax"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
                                     )}
 
                                     {/** Genres **/}
                                     <Row className="mt-3">
-                                        <Col style={{fontSize : "1.7vmin"}}>
+                                        <Col style={{fontSize : "1.4vmax"}}>
                                             <Badge bg="dark" className="p-2"><FaTheaterMasks/> {" "}
                                                 {game.genres && game.genres.map((genres, index) => (
                                                     <Link className="text-decoration-none" to={`/game/id/${genres.id}`}>
@@ -162,7 +163,7 @@ const ExampleGame = () => {
                                               fontSize="30px"
                                               fill="white"
                                               alignmentBaseline="middle">
-                                            <tspan y="70" style={{textShadow: "1px 1px #000000",}}>{game.aggregated_rating && convertScore(game.aggregated_rating)}</tspan>
+                                            <tspan y="80" style={{textShadow: "1px 1px #000000",}}>{game.aggregated_rating && convertScore(game.aggregated_rating)}</tspan>
                                             <tspan fontSize="14px" x="70" dy="2em">{game.aggregated_rating_count && game.aggregated_rating_count} votes</tspan>
                                         </text>
                                     </svg>
@@ -190,44 +191,20 @@ const ExampleGame = () => {
 
                         <Row className="text-sm-start pt-2" style={{fontSize: "16px"}}>
 
-
-
-
-                            {/** DLCs **/}
-                            {game.dlcs && (
-                                <Row className="mb-2">
-                                    <Card>
-                                        <Row className="p-3">
-                                            <h4>DLCs & Expansions </h4>
-                                            {game.dlcs.map(dlc => (
-                                                <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
-                                                    <Link to={`/game/id/${dlc.id}`}>
-                                                        <Card.Img style={{height : "170px"}} src={dlc.cover && resize(dlc.cover.url)}
-                                                        />
-                                                        <Card.Body className="p-1">
-                                                            <Card.Text style={{fontSize : "12px"}}>{dlc.name}</Card.Text>
-                                                        </Card.Body>
-                                                    </Link>
-                                                </Card>
-                                                ))}
-                                        </Row>
-                                    </Card>
-                                    </Row>
+                            {/** Summary **/}
+                            {game.summary && (
+                            <MainCard title={"Summary"} props={game.summary}/>
                             )}
 
 
-                            {/** Summary and storyline **/}
-                            <Row className="mb-2">
-                                <Card>{game.summary && (<Col className="p-3"> <h4>Summary </h4> {game.summary} </Col>)}</Card>
-                            </Row>
-
-                            <Row className="mb-2">
-                                <Card>{game.storyline && (<Col className="p-3"><h4>Storyline </h4> {game.storyline} </Col>)}</Card>
-                            </Row>
+                            {/** Storyline **/}
+                            {game.storyline && (
+                            <MainCard title={"Storyline"} props={game.storyline} />
+                            )}
 
 
-                        {/** Screenshots **/}
-                        <Row>
+                            {/** Screenshots **/}
+                            <Row>
 
                                 {game.screenshots && (
                                     <Card>
@@ -242,21 +219,51 @@ const ExampleGame = () => {
                                 </Col>
 
 
-                        {/** Artworks **/}
+                                {/** Artworks **/}
 
-                                <Row className="px-4 mt-3">
-                            {game.artworks && game.artworks.map(art => (
-                                <Col md="auto" className="p-1">
-                                    <Image
-                                        src={art.url && resize(art.url)}
-                                        style={{ width : "250px"}}
-                                    />
-                                </Col>
-                            ))}
-                                </Row>
-                        </Card>
+                                        <Row className="px-4 mt-3">
+                                    {game.artworks && game.artworks.map(art => (
+                                        <Col md="auto" className="p-1">
+                                            <Image
+                                                src={art.url && resize(art.url)}
+                                                style={{ width : "250px"}}
+                                            />
+                                        </Col>
+                                    ))}
+                                        </Row>
+                                            </Card>
                                 )}
                         </Row>
+
+
+                            <Row>
+                                {/** Collections **/}
+                                {game.collection && (
+                                    <Card>
+                                        <Col className="p-3">
+                                            <h4>Collection</h4>
+
+                                            <Accordion className="text-start">
+                                                <Accordion.Item eventKey="0">
+                                                    <Accordion.Header>{game.collection.name}</Accordion.Header>
+                                                    <Accordion.Body>
+                                                        <ListGroup>
+                                                            {game.collection.games && game.collection.games.map(cg => (
+                                                                <ListGroupItem>
+                                                                    <Link className="text-decoration-none" to={`/game/id/${cg.id}`}>
+                                                                        {cg.name}
+                                                                    </Link>
+                                                                </ListGroupItem>
+                                                            ))}
+                                                        </ListGroup>
+                                                    </Accordion.Body>
+                                                </Accordion.Item>
+                                            </Accordion>
+                                        </Col>
+                                    </Card>
+                                )}
+
+                            </Row>
 
                         </Row>
 
@@ -267,167 +274,158 @@ const ExampleGame = () => {
                     {/** Sidebar **/}
                     <Col md={4} className="px-0 py-2" style={{fontSize: "1rem"}}>
 
-                        {/**<MyCard props={game.platforms && game.platforms.map(x => x.name)}/> **}
-
                         {/** Category **/}
-                        <Card className="py-2">
-                            <Row>
-                                <Col md={4} className="text-black-50 border-end">Category <p><BiCategoryAlt/></p></Col>
-
-                                <Col className="text-lg-start px-4">
-                                        <p>{game.category ? "N/A" : convertCategory(game.category)}</p>
-                                </Col>
-                            </Row>
-                        </Card>
+                        <MetaCard title={"Category"} icon={<BiCategoryAlt/>} props={game.category ? "N/A" : convertCategory(game.category)}/>
 
                         {/** Platforms **/}
-                        <Card className="mt-2 py-2">
-                            <Row>
-                                <Col md={4} className="text-black-50 border-end">Platforms <p><GiConsoleController/></p></Col>
+                        {game.platforms && (
+                            <MetaCard title={"Platforms"} icon={<GiConsoleController/>} props={
+                                game.platforms.map(platforms => (
+                                    <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>
+                                        <Row className="my-3">
+                                            <Col md="auto">
+                                                <Image style={{width : "35px"}} src={platforms.platform_logo && logo_resize(platforms.platform_logo.url)}/>
+                                            </Col>
 
-                                <Col className="text-lg-start px-4">
-                                    {game.platforms && game.platforms.map(platforms => (
-                                                <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>
-                                                    <Row className="my-3">
-                                                        <Col md="auto">
-                                                            <Image style={{width : "35px"}} src={platforms.platform_logo && logo_resize(platforms.platform_logo.url)}/>
-                                                        </Col>
-
-                                                        <Col>
-                                                            <p>{platforms.name}</p>
-                                                        </Col>
-                                                    </Row>
-                                                </Link>
-                                            ))}
-                                </Col>
-                            </Row>
-                        </Card>
-
-                        {/** Player perspectives **/}
-                        {game.player_perspectives && (
-                            <Card className="mt-2 py-2">
-                                <Row>
-                                    <Col md={4} className="text-black-50 border-end">Perspective <p><FaStreetView/></p></Col>
-
-                                    <Col className="text-lg-start px-4">
-                                        {game.player_perspectives.map(pp => (
-                                            <p>{pp.name}</p>
-                                        ))}
-                                    </Col>
-                                </Row>
-                            </Card>
+                                            <Col>
+                                                <p>{platforms.name}</p>
+                                            </Col>
+                                        </Row>
+                                    </Link>
+                                ))
+                            }/>
                         )}
+
+
+                        {/** Developers **/}
+                        {game.involved_companies && (
+                            <MetaCard title={"Developers"} icon={<AiOutlineCode/>} props={game.involved_companies.map(companies => (<p>{companies.company.name}</p>))}/>
+                        )}
+
+
+                        {/** Player perspective **/}
+                        {game.player_perspectives && (
+                            <MetaCard title={"Perspective"} icon={<FaStreetView/>} props={game.player_perspectives.map(pp => (<p>{pp.name}</p>))}/>
+                        )}
+
 
                         {/** Game modes **/}
                         {game.game_modes && (
-                            <Card className="mt-2 py-2">
-                                <Row>
-                                    <Col md={4} className="text-black-50 border-end">Game Modes <p><FaNetworkWired/></p></Col>
-
-                                    <Col className="text-lg-start px-4">
-                                        {game.game_modes.map(gm => (
-                                            <p>{gm.name}</p>
-                                        ))}
-                                    </Col>
-                                </Row>
-                            </Card>
+                            <MetaCard title={"Game Modes"} icon={<FaNetworkWired/>} props={game.game_modes.map(mode => (<p>{mode.name}</p>))}/>
                         )}
 
-                        {/** Devs **/}
-                        <Card className="mt-2 py-2">
-                            <Row>
-                                <Col md={4} className="text-black-50 border-end">Developers <p><AiOutlineCode/></p></Col>
-
-                                <Col className="text-lg-start px-4">
-                                    {game.involved_companies && game.involved_companies.map(companies => (
-                                        <p>{companies.company.name}</p>
-                                    ))}
-                                </Col>
-                            </Row>
-                        </Card>
 
                         {/** Release dates **/}
-                        <Card className="mt-2 py-2">
-                            <Row>
-                                <Col md={4} className="text-black-50 border-end">Release Dates <p><RiCalendar2Fill/></p></Col>
+                        {game.release_dates && (
+                            <MetaCard title={"Release Dates"} icon={<RiCalendar2Fill/>}
+                                    props={game.release_dates.map(date => (
+                                        <Row className="pb-2">
+                                            <p>{date.platform.name}: {date.human}</p>
+                                        </Row>
+                                    ))}
+                            />
+                        )}
 
-                                <Col className="text-lg-start px-4">
-                                    {game.release_dates && game.release_dates.map(date => (
-                                                <Row className="pb-2">
-                                                    <p className="">{date.platform.name}: {date.human} </p>
-                                                </Row>
-                                            ))}
-                                </Col>
-                            </Row>
-                        </Card>
 
                         {/** Age ratings **/}
-                        <Card className="mt-2 py-2">
-                            <Row>
-                                <Col md={4} className="text-black-50 border-end">Age Ratings <p><RiParentLine/></p></Col>
-
-                                <Col className="text-lg-start px-4">
-                                    <Row>
+                        <MetaCard title={"Age Ratings"} icon={<RiParentLine/>} props={
+                            <>
+                                <Row>
                                     {game.age_ratings && game.age_ratings.map(age => (
-                                            <Col md={3}>
-                                                <Image style={{height :"45px", width: "35px"}} src={convertAge(age.rating)}/>
-                                            </Col>
+                                        <Col md={3}>
+                                            <Image style={{height: "45px", width: "35px"}} src={convertAge(age.rating)}/>
+                                        </Col>
                                     ))}
-                                    </Row>
-                                    {game.age_ratings && game.age_ratings.map(age => (
-                                            <Row className="pt-2">
-                                                {age.content_descriptions && age.content_descriptions.map(desc => (
-                                                    <p>{desc.description}</p>
-                                                ))}
-                                            </Row>
+                                </Row>
+
+                                {game.age_ratings && game.age_ratings.map(age => (
+                                    <Row className="pt-2">
+                                        {age.content_descriptions && age.content_descriptions.map(desc => (
+                                            <p>{desc.description}</p>
                                         ))}
-                                </Col>
-                            </Row>
-                        </Card>
+                                    </Row>
+                                ))}
+                            </>
+                        }/>
 
                         {/** Franchises **/}
                         {game.franchises && (
-                        <Card className="mt-2 py-2">
-                            <Row>
-                                <Col md={4} className="text-black-50 border-end">Franchises <p><BiBuildingHouse/></p> </Col>
-
-                                <Col className="text-lg-start px-4">
-                                    {game.franchises.map(fra => (
-                                        <p>{fra.name}</p>
-                                    ))}
-                                </Col>
-                            </Row>
-                        </Card>
+                            <MetaCard title={"Franchises"} icon={<BiBuildingHouse/>} props={game.franchises.map(fr => (<p>{fr.name}</p>))}/>
                         )}
 
                     </Col>
 
 
 
-                    <Row className="px-0 mt-2">
+                    <Row className="px-0 mt-2 text-start">
 
-                        {/** Collections **/}
-                            {game.collection && (
-                                <Col md className="px-0">
+                    </Row>
+
+                    <Row>
+                        {/** DLCs **/}
+                        {game.dlcs && (
+                            <Row className="mb-2">
                                 <Card>
-                                    <Row className="text-lg-start p-3">
-                                        <Col>
-                                            <h5>Collection</h5>
-                                            <p>{game.collection.name}</p>
-                                            <ListGroup>
-                                                {game.collection.games && game.collection.games.map(cg => (
-                                                    <ListGroupItem>
-                                                        <Link className="text-decoration-none" to={`/game/id/${cg.id}`}>
-                                                            {cg.name}
-                                                        </Link>
-                                                    </ListGroupItem>
-                                                ))}
-                                            </ListGroup>
-                                        </Col>
+                                    <Row className="p-3">
+                                        <h4>DLCs </h4>
+                                        {game.dlcs.map(dlc => (
+                                            <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
+                                                <Link to={`/game/id/${dlc.id}`}>
+                                                    <Card.Img style={{height : "170px"}} src={dlc.cover && resize(dlc.cover.url)}
+                                                    />
+                                                    <Card.Body className="p-1">
+                                                        <Card.Text style={{fontSize : "12px"}}>{dlc.name}</Card.Text>
+                                                    </Card.Body>
+                                                </Link>
+                                            </Card>
+                                        ))}
                                     </Row>
                                 </Card>
-                                </Col>
-                            )}
+                            </Row>
+                        )}
+
+                        {/** Expansions **/}
+                        {game.expansions && (
+                            <Row className="mb-2">
+                                <Card>
+                                    <Row className="p-3">
+                                        <h4>Expansions </h4>
+                                        {game.expansions.map(exp => (
+                                            <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
+                                                <Link to={`/game/id/${exp.id}`}>
+                                                    <CardImg style={{height : "170px"}} src={exp.cover.url && resize(exp.cover.url)}/>
+                                                    <Card.Body className="p-1">
+                                                        <Card.Text style={{fontSize : "12px"}}>{exp.name}</Card.Text>
+                                                    </Card.Body>
+                                                </Link>
+                                            </Card>
+                                        ))}
+                                    </Row>
+                                </Card>
+                            </Row>
+                        )}
+
+                        {/** Expandable games **/}
+                        {game.expanded_games && (
+                            <Row className="mb-2">
+                                <Card>
+                                    <Row className="p-3">
+                                        <h4>Expansions </h4>
+                                        {game.expanded_games.map(exp => (
+                                            <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
+                                                <Link to={`/game/id/${exp.id}`}>
+                                                    <CardImg style={{height : "170px"}} src={exp.cover.url && resize(exp.cover.url)}/>
+                                                    <Card.Body className="p-1">
+                                                        <Card.Text style={{fontSize : "12px"}}>{exp.name}</Card.Text>
+                                                    </Card.Body>
+                                                </Link>
+                                            </Card>
+                                        ))}
+                                    </Row>
+                                </Card>
+                            </Row>
+                        )}
+
                     </Row>
 
 

@@ -97,7 +97,7 @@ export const Home = () => (
                 </Col>
 
 
-                <Col md={{ span: 3, offset: 1 }} className="text-sm-start">
+                <Col style={{ paddingLeft : "2%"}} className="text-sm-start">
 
 
                     <Row className="mb-3">
