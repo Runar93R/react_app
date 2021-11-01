@@ -1,4 +1,7 @@
+import {ImCheckmark, ImCross} from "react-icons/all";
+
 const no_img =  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/488px-No-Image-Placeholder.svg.png'
+
 
 /**
  * Converts unix time stamp to conventional numeric date
@@ -13,6 +16,17 @@ export const convertTime = (input) => {
     }
 }
 
+export const convertMultiplayer = (input) => {
+
+    if (input === true) {
+        return <ImCheckmark/>
+    }
+    else {
+        return <ImCross/>
+    }
+
+}
+
 export const convertRatingColor = (input) => {
 
 }
@@ -23,7 +37,7 @@ export const convertRatingColor = (input) => {
  * @returns {string}  score with two decimals
  */
 export const convertScore = (input) => {
-    return input.toFixed(2);
+    return input.toFixed(1);
 }
 
 /**
@@ -149,6 +163,7 @@ export function sortData(input) {
  * @param input inital age ratings
  * @returns {string} src for images
  */
+
 export const convertAge = (input) => {
     if (input === 1) {
         return "/age_ratings/age-3.jpg" ;

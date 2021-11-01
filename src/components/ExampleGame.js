@@ -2,7 +2,7 @@ import {allFields, useClientData} from "../utilities/axios";
 import {
     checkData,
     convertAge,
-    convertCategory,
+    convertCategory, convertMultiplayer,
     convertScore,
     convertTime,
     logo_resize,
@@ -10,7 +10,7 @@ import {
     screenshotResize
 } from "../utilities/converters";
 
-import {GameAccordion, MainCard, MetaCard, MyCard} from "./CustomComponents";
+import {GameAccordion, InfoCard, ContentCard} from "./CustomComponents";
 
 import {
     Accordion,
@@ -20,15 +20,17 @@ import {
     CarouselItem,
     Col,
     Container,
-    Image, ListGroup, ListGroupItem,
+    Image, ListGroup, ListGroupItem, OverlayTrigger, Popover, PopoverBody, PopoverHeader,
     Row
 } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {GiConsoleController} from "react-icons/gi";
-import {AiOutlineCode} from "react-icons/ai";
+import {AiFillPlusSquare, AiOutlineCode, AiOutlineUnderline} from "react-icons/ai";
 import {RiCalendar2Fill, RiParentLine} from "react-icons/ri";
-import {BiBuildingHouse, BiCategoryAlt} from "react-icons/bi"
-import {FaCalendarAlt, FaNetworkWired, FaStreetView, FaTheaterMasks} from "react-icons/fa"
+import {BiBuildingHouse, BiCategoryAlt, BiUnderline} from "react-icons/bi"
+import {Fa500Px, FaCalendarAlt, FaNetworkWired, FaStreetView, FaTheaterMasks} from "react-icons/fa"
+import {CgDetailsMore, FcCheckmark, GoInfo, HiOutlineMinus, MdNetworkWifi} from "react-icons/all";
+import {ListNested} from "react-bootstrap-icons";
 
 /**
  * Renders single game object for testing purpose
@@ -37,7 +39,7 @@ import {FaCalendarAlt, FaNetworkWired, FaStreetView, FaTheaterMasks} from "react
  */
 const ExampleGame = () => {
 
-    const {data: game} = useClientData('/games', allFields + 'w id=19565;') //19565
+    const {data: game} = useClientData('/games', allFields + 'w id=1020;') //19565 // 145505
 
     checkData(game)
 
@@ -46,10 +48,10 @@ const ExampleGame = () => {
         <div className="App">
 
             {/** Hero **/}
-            <Container fluid>
+            <Container className="px-0">
 
                 {/** Hero image **/}
-                <Row className="mb-2"
+                <Row className="p-0"
                     style={{
                         backgroundImage: `url(https:${game.screenshots 
                             ? screenshotResize(game.screenshots[0].url) 
@@ -91,8 +93,28 @@ const ExampleGame = () => {
 
                                     {/** First release date **/}
                                     {game.first_release_date && (
-                                    <Badge className="p-2 shadow" style={{fontSize : "1.4vmin"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
+
+                                        <OverlayTrigger trigger={"click"} placement={"bottom"}  overlay={
+                                            <Popover id={'alldates'}>
+                                                <PopoverHeader as={"h4"}>Release Dates</PopoverHeader>
+                                                <PopoverBody>
+                                                    <ListGroup variant={"flush"}>
+                                                        {game.release_dates && game.release_dates.map(date => (
+                                                            <ListGroupItem>
+                                                                {date.platform.name}: {date.human}
+                                                            </ListGroupItem>
+                                                        ))}
+                                                    </ListGroup>
+                                                </PopoverBody>
+                                            </Popover>
+                                        }>
+                                            <Badge className="p-2 border border-light" style={{fontSize : "1.5vmin"}} bg="myPill">
+                                                <FaCalendarAlt/>
+                                                {" "}<>{convertTime(game.first_release_date)}</>
+                                            </Badge>
+                                        </OverlayTrigger>
                                     )}
+
 
                                     {/** Genres **/}
                                     <Row className="mt-3">
@@ -189,17 +211,17 @@ const ExampleGame = () => {
                     {/** Main page **/}
                     <Col md={8} className="px-0">
 
-                        <Row className="text-sm-start pt-2" style={{fontSize: "16px"}}>
+                        <Row className="text-sm-start py-2" style={{fontSize: "16px"}}>
 
                             {/** Summary **/}
                             {game.summary && (
-                            <MainCard title={"Summary"} props={game.summary}/>
+                            <ContentCard title={"Summary"} props={game.summary}/>
                             )}
 
 
                             {/** Storyline **/}
                             {game.storyline && (
-                            <MainCard title={"Storyline"} props={game.storyline} />
+                            <ContentCard title={"Storyline"} props={game.storyline} />
                             )}
 
 
@@ -283,18 +305,20 @@ const ExampleGame = () => {
                     {/** Sidebar **/}
                     <Col md={4} className="px-0 py-2" style={{fontSize: "1rem"}}>
 
+
                         {/** Category **/}
 {/*
-                        <MetaCard title={"Category"} icon={<BiCategoryAlt/>}
+                        <InfoCard title={"Category"} icon={<BiCategoryAlt/>}
                                   props={game.category ? "N/A" : convertCategory(game.category)}/>
 */}
 
                         {/** Platforms **/}
                         {game.platforms && (
-                            <MetaCard title={"Platforms"} icon={<GiConsoleController/>} props={
+                            <InfoCard title={"Platforms"} icon={<GiConsoleController/>} props={
                                 game.platforms.map(platforms => (
+                                    <ListGroupItem>
                                     <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>
-                                        <Row className="my-3">
+                                        <Row>
                                             <Col md="auto">
                                                 <Image style={{width: "35px"}}
                                                        src={platforms.platform_logo && logo_resize(platforms.platform_logo.url)}/>
@@ -305,6 +329,7 @@ const ExampleGame = () => {
                                             </Col>
                                         </Row>
                                     </Link>
+                                    </ListGroupItem>
                                 ))
                             }/>
                         )}
@@ -312,45 +337,18 @@ const ExampleGame = () => {
 
                         {/** Developers **/}
                         {game.involved_companies && (
-                            <MetaCard title={"Developers"} icon={<AiOutlineCode/>}
+                            <InfoCard title={"Developers"} icon={<AiOutlineCode/>}
                                       props={game.involved_companies.map(companies => (
-                                          <p>{companies.company.name}</p>))}/>
+                                          <ListGroupItem>{companies.company.name}</ListGroupItem>))}/>
                         )}
-
-
-                        {/** Player perspective **/}
-                        {game.player_perspectives && (
-                            <MetaCard title={"Perspective"} icon={<FaStreetView/>}
-                                      props={game.player_perspectives.map(pp => (<p>{pp.name}</p>))}/>
-                        )}
-
-
-                        {/** Game modes **/}
-                        {game.game_modes && (
-                            <MetaCard title={"Game Modes"} icon={<FaNetworkWired/>}
-                                      props={game.game_modes.map(mode => (<p>{mode.name}</p>))}/>
-                        )}
-
-
-                        {/** Release dates **/}
-                        {game.release_dates && (
-                            <MetaCard title={"Release Dates"} icon={<RiCalendar2Fill/>}
-                                      props={game.release_dates.map(date => (
-                                          <Row className="pb-2">
-                                              <p>{date.platform.name}: {date.human}</p>
-                                          </Row>
-                                      ))}
-                            />
-                        )}
-
 
                         {/** Age ratings **/}
-                        <MetaCard title={"Age Ratings"} icon={<RiParentLine/>} props={
+                        <InfoCard title={"Age Ratings"} icon={<RiParentLine/>} props={
                             <>
                                 <Row>
                                     {game.age_ratings && game.age_ratings.map(age => (
                                         <Col md={3}>
-                                            <Image style={{height: "45px", width: "35px"}}
+                                            <Image style={{height: "75px", width: "55px"}}
                                                    src={convertAge(age.rating)}/>
                                         </Col>
                                     ))}
@@ -359,25 +357,81 @@ const ExampleGame = () => {
                                 {game.age_ratings && game.age_ratings.map(age => (
                                     <Row className="pt-2">
                                         {age.content_descriptions && age.content_descriptions.map(desc => (
-                                            <p>{desc.description}</p>
+                                            <ListGroupItem>{desc.description}</ListGroupItem>
                                         ))}
                                     </Row>
                                 ))}
                             </>
                         }/>
 
+
+                        {/** Player perspective **/}
+                        {game.player_perspectives && (
+                            <InfoCard title={"Perspective"} icon={<FaStreetView/>}
+                                      props={game.player_perspectives.map(pp => (<ListGroupItem>{pp.name}</ListGroupItem>))}/>
+                        )}
+
+
+                        {/** Game modes **/}
+                        {game.game_modes && (
+                            <InfoCard title={"Game Modes"} icon={<FaNetworkWired/>}
+                                      props={
+                                          game.game_modes.map(mode => (<ListGroupItem>{mode.name}</ListGroupItem>))}/>
+                        )}
+
+                        {/** Multiplayer modes**/}
+                        {game.multiplayer_modes && (
+                            <InfoCard title={"Multiplayer Modes"} icon={<MdNetworkWifi/>}
+                                      props={
+                                          game.multiplayer_modes.map((multi, key) => (
+                                          <>
+                                              <p>Coop : {convertMultiplayer(multi.campaigncoop)}</p>
+
+                                              <p>Drop-in: {convertMultiplayer(multi.dropin)}</p>
+
+                                              <p>LAN Coop {convertMultiplayer(multi.lancoop)}</p>
+
+                                              <p>Offline Coop {convertMultiplayer(multi.offlinecoop)}</p>
+
+                                              <p>Max players:{multi.offlinecoopmax}</p>
+
+                                              <p>Max Offline: {multi.offlinemax}</p>
+
+                                              <p>Online Coop: {convertMultiplayer(multi.onlinecoop)}</p>
+
+                                              <p>Max players: {multi.onlinecoopmax}</p>
+
+                                              <p>Max Online Players : {multi.onlinemax}</p>
+
+                                              <p>Splitscreen: {convertMultiplayer(multi.splitscreen)}</p>
+
+                                              <p>Splitscreen Online: {convertMultiplayer(multi.splitscreenonline)}</p>
+
+                                          </>
+                                      ))}/>
+                        )}
+
+
+                        {/** Release dates **/}
+                        {game.release_dates && (
+                            <InfoCard title={"Release Dates"} icon={<RiCalendar2Fill/>}
+                                      props={game.release_dates.map(date => (
+                                          <ListGroupItem>
+                                              <><text className="text-black-50">{date.platform.name}</text>: {date.human}</>
+                                          </ListGroupItem>
+                                      ))}
+                            />
+                        )}
+
+
                         {/** Franchises **/}
                         {game.franchises && (
-                            <MetaCard title={"Franchises"} icon={<BiBuildingHouse/>}
-                                      props={game.franchises.map(fr => (<p>{fr.name}</p>))}/>
+                            <InfoCard title={"Franchises"} icon={<BiBuildingHouse/>}
+                                      props={game.franchises.map(fr => (<ListGroupItem>{fr.name}</ListGroupItem>))}/>
                         )}
 
                     </Col>
 
-
-
-                    <Row className="px-0 mt-2 text-start">
-                    </Row>
 
                     <Row>
                         {/** DLCs **/}

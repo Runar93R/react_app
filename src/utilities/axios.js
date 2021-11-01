@@ -9,8 +9,8 @@ export const client = axios.create({
     dataType: 'JSON',
     headers: {
         'Accept': 'application/json',
-        'Client-ID': '#',
-        'Authorization': '#',
+        'Client-ID': 'zxwce2r3f2k88ilzqci0bugim0bh4c',
+        'Authorization': 'Bearer maw1s9z4czq0q4k5uds8fdmvze4usa',
     },
 })
 
@@ -63,10 +63,10 @@ export const useClientData = (url, fields) => {
  */
 export const allFields =
     "f alternative_names.*, artworks.url, aggregated_rating, aggregated_rating_count, age_ratings.rating," +
-    "age_ratings.content_descriptions.description, cover.url, category, collection.*, collection.games.*," +
+    "age_ratings.synopsis, age_ratings.content_descriptions.description, cover.url, category, collection.*, collection.games.*," +
     "collection.games.cover.*, dlcs.*, dlcs.cover.*, expanded_games.*, expanded_games.cover.*," +
     " expansions.*, expansions.cover.url, first_release_date, franchises.name, game_modes.name, genres.name, " +
-    "id, involved_companies.company.name," +
+    "id, involved_companies.company.name, multiplayer_modes.*," +
     "name, platforms.name, platforms.abbreviation, platforms.platform_logo.url, platforms.slug," +
     "player_perspectives.name, release_dates.*, release_dates.platform.*," +
     "similar_games.name, similar_games.id," +

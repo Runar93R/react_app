@@ -11,20 +11,22 @@ import {Link} from "react-router-dom";
  * @returns {JSX.Element} renders card
  * @constructor
  */
-export const MetaCard = ({title, icon, props}) => {
+export const InfoCard = ({title, icon, props}) => {
 
     return(
+        <Row style={{paddingLeft : "1vw"}}>
         <Card className="mb-2 py-2">
             <Row>
                 <Col md={4} className="text-black-50 border-end">{title}<p>{icon}</p></Col>
 
-                <Col className="text-lg-start px-4"><p>{props}</p></Col>
+                <Col className="px-4"><ListGroup variant={"flush"} className="text-lg-start">{props}</ListGroup></Col>
             </Row>
         </Card>
+        </Row>
     )
 }
 
-export const MainCard = ({title, props}) => {
+export const ContentCard = ({title, props}) => {
     return(
         <Row className="mb-2">
             <Card>
