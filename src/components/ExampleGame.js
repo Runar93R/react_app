@@ -76,7 +76,7 @@ const ExampleGame = () => {
                                                boxShadow: "4px 2px 2px 2px black",
                                                WebkitBoxShadow: "2px 2px 2px 2px black",
                                                border: "0.7px solid white",
-                                               height: "30vh"
+                                               height: "25vmin"
                                            }}/>
                                 </Col>
 
@@ -91,12 +91,12 @@ const ExampleGame = () => {
 
                                     {/** First release date **/}
                                     {game.first_release_date && (
-                                    <Badge className="p-2 shadow" style={{fontSize : "1vmax"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
+                                    <Badge className="p-2 shadow" style={{fontSize : "2vmin"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
                                     )}
 
                                     {/** Genres **/}
                                     <Row className="mt-3">
-                                        <Col style={{fontSize : "1.4vmax"}}>
+                                        <Col style={{fontSize : "2vmin"}}>
                                             <Badge bg="dark" className="p-2"><FaTheaterMasks/> {" "}
                                                 {game.genres && game.genres.map((genres, index) => (
                                                     <Link className="text-decoration-none" to={`/game/id/${genres.id}`}>
