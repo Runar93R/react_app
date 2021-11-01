@@ -10,7 +10,7 @@ import {
     screenshotResize
 } from "../utilities/converters";
 
-import {MainCard, MetaCard, MyCard} from "./MyCards";
+import {GameAccordion, MainCard, MetaCard, MyCard} from "./CustomComponents";
 
 import {
     Accordion,
@@ -37,7 +37,7 @@ import {FaCalendarAlt, FaNetworkWired, FaStreetView, FaTheaterMasks} from "react
  */
 const ExampleGame = () => {
 
-    const {data: game} = useClientData('/games', allFields + 'w id=546;') //19565
+    const {data: game} = useClientData('/games', allFields + 'w id=19565;') //19565
 
     checkData(game)
 
@@ -91,12 +91,12 @@ const ExampleGame = () => {
 
                                     {/** First release date **/}
                                     {game.first_release_date && (
-                                    <Badge className="p-2 shadow" style={{fontSize : "2vmin"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
+                                    <Badge className="p-2 shadow" style={{fontSize : "1.4vmin"}} bg="danger"><FaCalendarAlt/> {convertTime(game.first_release_date)}</Badge>
                                     )}
 
                                     {/** Genres **/}
                                     <Row className="mt-3">
-                                        <Col style={{fontSize : "2vmin"}}>
+                                        <Col style={{fontSize : "1.8vmin"}}>
                                             <Badge bg="dark" className="p-2"><FaTheaterMasks/> {" "}
                                                 {game.genres && game.genres.map((genres, index) => (
                                                     <Link className="text-decoration-none" to={`/game/id/${genres.id}`}>
@@ -236,32 +236,41 @@ const ExampleGame = () => {
                         </Row>
 
 
-                            <Row>
+                            <Row className="px-0 mt-2">
+
+
+                                <CardGroup>
+                                <Card>
+
+                                   <Col>
                                 {/** Collections **/}
                                 {game.collection && (
-                                    <Card>
-                                        <Col className="p-3">
-                                            <h4>Collection</h4>
-
-                                            <Accordion className="text-start">
-                                                <Accordion.Item eventKey="0">
-                                                    <Accordion.Header>{game.collection.name}</Accordion.Header>
-                                                    <Accordion.Body>
-                                                        <ListGroup>
-                                                            {game.collection.games && game.collection.games.map(cg => (
-                                                                <ListGroupItem>
-                                                                    <Link className="text-decoration-none" to={`/game/id/${cg.id}`}>
-                                                                        {cg.name}
-                                                                    </Link>
-                                                                </ListGroupItem>
-                                                            ))}
-                                                        </ListGroup>
-                                                    </Accordion.Body>
-                                                </Accordion.Item>
-                                            </Accordion>
-                                        </Col>
-                                    </Card>
+                                    <GameAccordion title={"Collection"} collection={game.collection.name}
+                                                   id={game.collection.games.map(x => (x.id))}
+                                                   name={game.collection.games.map(x => (x.name))}/>
                                 )}
+
+                                   </Col>
+
+                                </Card>
+
+
+                                <Card>
+
+                                    <Col>
+
+                                {/** DLCs **/}
+                                {game.dlcs && (
+                                    <GameAccordion title={"DLCs"} collection={game.dlcs.name}
+                                                   id={game.dlcs.map(x => (x.id))}
+                                                   name={game.dlcs.map(x => (x.name))}/>
+                                )}
+
+                                    </Col>
+
+                                </Card>
+
+                                </CardGroup>
 
                             </Row>
 
@@ -275,7 +284,10 @@ const ExampleGame = () => {
                     <Col md={4} className="px-0 py-2" style={{fontSize: "1rem"}}>
 
                         {/** Category **/}
-                        <MetaCard title={"Category"} icon={<BiCategoryAlt/>} props={game.category ? "N/A" : convertCategory(game.category)}/>
+{/*
+                        <MetaCard title={"Category"} icon={<BiCategoryAlt/>}
+                                  props={game.category ? "N/A" : convertCategory(game.category)}/>
+*/}
 
                         {/** Platforms **/}
                         {game.platforms && (
@@ -284,7 +296,8 @@ const ExampleGame = () => {
                                     <Link className="text-decoration-none" to={`/platform/${platforms.slug}`}>
                                         <Row className="my-3">
                                             <Col md="auto">
-                                                <Image style={{width : "35px"}} src={platforms.platform_logo && logo_resize(platforms.platform_logo.url)}/>
+                                                <Image style={{width: "35px"}}
+                                                       src={platforms.platform_logo && logo_resize(platforms.platform_logo.url)}/>
                                             </Col>
 
                                             <Col>
@@ -299,30 +312,34 @@ const ExampleGame = () => {
 
                         {/** Developers **/}
                         {game.involved_companies && (
-                            <MetaCard title={"Developers"} icon={<AiOutlineCode/>} props={game.involved_companies.map(companies => (<p>{companies.company.name}</p>))}/>
+                            <MetaCard title={"Developers"} icon={<AiOutlineCode/>}
+                                      props={game.involved_companies.map(companies => (
+                                          <p>{companies.company.name}</p>))}/>
                         )}
 
 
                         {/** Player perspective **/}
                         {game.player_perspectives && (
-                            <MetaCard title={"Perspective"} icon={<FaStreetView/>} props={game.player_perspectives.map(pp => (<p>{pp.name}</p>))}/>
+                            <MetaCard title={"Perspective"} icon={<FaStreetView/>}
+                                      props={game.player_perspectives.map(pp => (<p>{pp.name}</p>))}/>
                         )}
 
 
                         {/** Game modes **/}
                         {game.game_modes && (
-                            <MetaCard title={"Game Modes"} icon={<FaNetworkWired/>} props={game.game_modes.map(mode => (<p>{mode.name}</p>))}/>
+                            <MetaCard title={"Game Modes"} icon={<FaNetworkWired/>}
+                                      props={game.game_modes.map(mode => (<p>{mode.name}</p>))}/>
                         )}
 
 
                         {/** Release dates **/}
                         {game.release_dates && (
                             <MetaCard title={"Release Dates"} icon={<RiCalendar2Fill/>}
-                                    props={game.release_dates.map(date => (
-                                        <Row className="pb-2">
-                                            <p>{date.platform.name}: {date.human}</p>
-                                        </Row>
-                                    ))}
+                                      props={game.release_dates.map(date => (
+                                          <Row className="pb-2">
+                                              <p>{date.platform.name}: {date.human}</p>
+                                          </Row>
+                                      ))}
                             />
                         )}
 
@@ -333,7 +350,8 @@ const ExampleGame = () => {
                                 <Row>
                                     {game.age_ratings && game.age_ratings.map(age => (
                                         <Col md={3}>
-                                            <Image style={{height: "45px", width: "35px"}} src={convertAge(age.rating)}/>
+                                            <Image style={{height: "45px", width: "35px"}}
+                                                   src={convertAge(age.rating)}/>
                                         </Col>
                                     ))}
                                 </Row>
@@ -350,7 +368,8 @@ const ExampleGame = () => {
 
                         {/** Franchises **/}
                         {game.franchises && (
-                            <MetaCard title={"Franchises"} icon={<BiBuildingHouse/>} props={game.franchises.map(fr => (<p>{fr.name}</p>))}/>
+                            <MetaCard title={"Franchises"} icon={<BiBuildingHouse/>}
+                                      props={game.franchises.map(fr => (<p>{fr.name}</p>))}/>
                         )}
 
                     </Col>
@@ -358,7 +377,6 @@ const ExampleGame = () => {
 
 
                     <Row className="px-0 mt-2 text-start">
-
                     </Row>
 
                     <Row>
