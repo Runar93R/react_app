@@ -3,6 +3,10 @@
   padding-top: 2px;
 }
 
+
+.white {color: white}
+.green {color : green}
+
 .bg-myBgBg {
   background-color: rgb(15, 15, 19) !important;
 }

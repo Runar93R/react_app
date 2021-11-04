@@ -45,13 +45,47 @@ const ExampleGame = () => {
 
     return (
 
-        <div className="App">
+        <div className="App bg-white">
 
             {/** Hero **/}
             <Container className="px-0">
 
                 {/** Hero image **/}
-                <Row className="p-0"
+                <Row className="text-start text-white px-5"
+                style={{
+                backgroundImage: `url(https:${game.screenshots
+                    ? screenshotResize(game.screenshots[0].url)
+                    : null
+                })`,
+                backgroundSize : "cover",
+                height : "auto",
+            }}>
+
+
+                <Col lg={12} className="align-self-center py-4">
+
+                    <Row className="py-2" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
+
+                        <Col md={"auto"}>
+                            <Image src={game.cover && resize(game.cover.url)} className="border border-white" style={{height : "33vh"}}/>
+                        </Col>
+
+                        <Col md={6}>
+                            <Row>
+                                <Col>
+                                    <h1 style={{textShadow: "3px 3px #000000", borderBottom : "1px solid white"}}>{game.name}</h1>
+                                    <Row className="py-4"><h6><FaCalendarAlt/> {game.first_release_date && convertTime(game.first_release_date)}</h6></Row>
+                                    <Row><h6><FaTheaterMasks/> {game.genres && game.genres.map((genres, index) => (
+                                        <Link className="text-decoration-none" to={`/game/id/${genres.id}`}>
+                                            <span className="text-white">{(index ? ', ' : '') + genres.name}</span>
+                                        </Link>
+                                    ))}</h6></Row>
+                                </Col>
+
+                            </Row>
+                        </Col>
+                    </Row>
+                {/*<Row className="p-0"
                     style={{
                         backgroundImage: `url(https:${game.screenshots 
                             ? screenshotResize(game.screenshots[0].url) 
@@ -63,12 +97,12 @@ const ExampleGame = () => {
                         color : "white",
                     }}>
 
-                    {/** Cover, title, release date and rating **/}
+                    * Cover, title, release date and rating *
                     <Col className="align-self-center" lg={12}>
 
                         <Container>
 
-                            {/** Cover image **/}
+                            * Cover image *
                             <Row className="align-items-center">
                                 <Col md="auto">
                                     <Image fluid
@@ -82,7 +116,7 @@ const ExampleGame = () => {
                                            }}/>
                                 </Col>
 
-                                {/** Title **/}
+                                * Title *
                                 <Col md={7} className="text-start">
                                     <Row className="pb-3 mb-4">
                                         <span style={{
@@ -91,7 +125,7 @@ const ExampleGame = () => {
                                       }}>{game.name}</span>
                                     </Row>
 
-                                    {/** First release date **/}
+                                    * First release date *
                                     {game.first_release_date && (
 
                                         <OverlayTrigger trigger={"click"} placement={"bottom"}  overlay={
@@ -116,7 +150,7 @@ const ExampleGame = () => {
                                     )}
 
 
-                                    {/** Genres **/}
+                                    * Genres *
                                     <Row className="mt-3">
                                         <Col style={{fontSize : "1.8vmin"}}>
                                             <Badge bg="dark" className="p-2"><FaTheaterMasks/> {" "}
@@ -131,7 +165,7 @@ const ExampleGame = () => {
 
                                 </Col>
 
-                                {/** Rating SVG **/}
+                                * Rating SVG *
                                 <Col className="align-self-center">
                                     <svg>
                                         <defs>
@@ -197,8 +231,9 @@ const ExampleGame = () => {
                         </Container>
                     </Col>
 
+                </Row>*/}
+                </Col>
                 </Row>
-
             </Container>
 
 
