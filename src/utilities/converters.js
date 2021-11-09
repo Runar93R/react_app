@@ -1,6 +1,13 @@
 import {ImCheckmark, ImCross} from "react-icons/all";
+import {ProgressBar} from "react-bootstrap";
+import {RatingBar} from "../components/CustomComponents";
 
-const no_img =  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/488px-No-Image-Placeholder.svg.png'
+/**
+ * Placeholder images when image data is missing
+ * @type {string} the url of the images
+ */
+export const cover_placeholder = "https://via.placeholder.com/230x300.png?text=No+Image+Available";
+export const large_placeholder = "https://via.placeholder.com/1920x1080.png?text=No+Image+Available";
 
 
 /**
@@ -8,7 +15,7 @@ const no_img =  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Im
  * @param input unix time
  * @returns {string|*} numeric date
  */
-export const convertTime = (input) => {
+export const convertDate = (input) => {
     if (isNaN(input)) {
         return input;
     } else {
@@ -27,8 +34,23 @@ export const convertMultiplayer = (input) => {
 
 }
 
-export const convertRatingColor = (input) => {
+export const rateColor = (input) => {
 
+    if (isNaN(input)) {
+        return <RatingBar color={"info"} score={100} label={"N/A"}/>
+    }
+
+    if (input >= 70) {
+        return <RatingBar color={"success"} score={input} label={convertScore(input)}/>
+    }
+
+    if (input >= 40) {
+        return <RatingBar color={"warning"} score={input} label={convertScore(input)}/>
+    }
+
+    else {
+        return <RatingBar color={"danger"} score={input} label={convertScore(input)}/>
+    }
 }
 
 /**
@@ -71,7 +93,7 @@ export function logo_resize(input) {
  * @param input
  * @returns {*}
  */
-export function screenshotResize(input) {
+export function upscale(input) {
     if (input.includes('images.igdb.')) {
         return input.replace('thumb', '1080p_2x');
     } else {
@@ -87,10 +109,10 @@ export function screenshotResize(input) {
  */
 export function checkData(obj) {
     if (!("cover" in obj)) { // if no cover key
-        return obj["cover"] = {url : no_img }  // return cover key with placeholder image
+        return obj["cover"] = {url : cover_placeholder }  // return cover key with placeholder image
     }
     if(!("similar_games" in obj)) {  // if no similar games
-        return obj["similar_games"] = [{cover : {url : no_img}}, {name : "No similar games"}] // return cover key with placeholder image
+        return obj["similar_games"] = [{cover : {url : cover_placeholder}}, {name : "No similar games"}] // return cover key with placeholder image
     }
 }
 
@@ -136,7 +158,7 @@ export function checkPlatform(obj) {
 export function checkGames(arr) {
     Object.keys(arr).forEach(key => {
         if (!arr[key].cover) {
-            return arr[key].cover = {url: no_img}
+            return arr[key].cover = {url: cover_placeholder}
         }
 
         if(!arr[key].first_release_date) {
@@ -201,6 +223,27 @@ export const convertAge = (input) => {
     if (input === 12) {
         return "/age_ratings/AO.svg";
     }
+    if (input === 17) {
+        return "/age_ratings/cero_z.png";
+    }
+
+    if (input === 22) {
+        return "/age_ratings/grac_all.png";
+    }
+
+    if (input === 26) {
+        return "/age_ratings/grac_test.png";
+    }
+
+    if(input === 33) {
+        return "/age_ratings/acb_15.png";
+    }
+
+    if(input === 38) {
+        return "/age_ratings/acb_r.png";
+    }
+
+
 }
 
 

@@ -50,7 +50,7 @@ const Games = () => {
     }
 
 
-    const {data: games} = useClient('/games', `f id, name, cover.url, platforms.name, genres.name; limit 25; ${filter};`);
+    const {data: games} = useClient('/games', `f id, name, slug, cover.url, rating; sort rating desc; where rating != null; limit 25;${filter};`);
     const {data: platforms} = useClient('/platforms', limitFields);
     const {data: genres} = useClient('/genres', 'f id, name, slug; limit 35;')
     const {data : game_modes} = useClient('/game_modes', 'f id, name, slug;');
@@ -82,7 +82,7 @@ const Games = () => {
                     <Row sm={4} xs={2}>
                         {games.map(game => (
                             <Col className="p-3">
-                                <Link to={`/game/id/${game.id}`} className="gamelink" key={game.id}>
+                                <Link to={`/game/${game.slug}`} className="gamelink" key={game.id}>
                                     <CardGroup>
                                         <Card bg="dark" style={{width: "186", height : "300px"}}>
                                             <Card.Img

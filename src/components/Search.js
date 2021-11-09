@@ -15,7 +15,7 @@ import {
     Row, Table,
 } from "react-bootstrap";
 import Form from "react-bootstrap/Form"
-import {checkGames, convertTime} from "../utilities/converters";
+import {checkGames, convertDate} from "../utilities/converters";
 
 /**
  * Renders data when searching for a game
@@ -42,7 +42,7 @@ const Search = (props) => {
 
     const fetchData = async () => {
         try {
-            const response = await client.post('/games', `f name, first_release_date, id, cover.url ; search "${query}";`);
+            const response = await client.post('/games', `f name, first_release_date, id, cover.url, slug; search "${query}";`);
             setGames(response.data)
         } catch (error) {
             setError(true);
@@ -96,12 +96,12 @@ const Search = (props) => {
                                 <tr key={item.id}>
                                     <td><Image src={item.cover && item.cover.url} className="search-cover" alt="cover" rounded/></td>
                                     <td>
-                                        <Link to={`/game/id/${item.id}`} key={item.id} className="search-link" onClick={props.onHide}>
+                                        <Link to={`/game/${item.slug}`} key={item.id} className="search-link" onClick={props.onHide}>
                                             <p>{item.name}</p>
                                         </Link>
                                     </td>
                                     <td>
-                                        {item.first_release_date && convertTime(item.first_release_date)}
+                                        {item.first_release_date && convertDate(item.first_release_date)}
                                     </td>
                                 </tr>
                             )})}

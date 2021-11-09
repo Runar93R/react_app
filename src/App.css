@@ -12,7 +12,8 @@
 }
 
 .bg-myPill {
-  background-image: linear-gradient(to right, #de5200, #ea106e);
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
 }
 
 .bg-myRating{
@@ -55,7 +56,7 @@
 }
 
 .bg-myDark {
-  background-color: hsl(0, 20%, 3%);
+  background-color: hsl(0, 0%, 7%);
 }
 
 .bg-myBg {

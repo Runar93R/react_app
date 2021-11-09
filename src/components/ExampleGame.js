@@ -4,10 +4,10 @@ import {
     convertAge,
     convertCategory, convertMultiplayer,
     convertScore,
-    convertTime,
-    logo_resize,
+    convertDate,
+    logo_resize, rateColor,
     resize,
-    screenshotResize
+    upscale
 } from "../utilities/converters";
 
 import {GameAccordion, InfoCard, ContentCard} from "./CustomComponents";
@@ -20,8 +20,8 @@ import {
     CarouselItem,
     Col,
     Container,
-    Image, ListGroup, ListGroupItem, OverlayTrigger, Popover, PopoverBody, PopoverHeader,
-    Row
+    Image, ListGroup, ListGroupItem, Overlay, OverlayTrigger, Popover, PopoverBody, PopoverHeader, ProgressBar,
+    Row, Tooltip
 } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {GiConsoleController} from "react-icons/gi";
@@ -29,8 +29,16 @@ import {AiFillPlusSquare, AiOutlineCode, AiOutlineUnderline} from "react-icons/a
 import {RiCalendar2Fill, RiParentLine} from "react-icons/ri";
 import {BiBuildingHouse, BiCategoryAlt, BiUnderline} from "react-icons/bi"
 import {Fa500Px, FaCalendarAlt, FaNetworkWired, FaStreetView, FaTheaterMasks} from "react-icons/fa"
-import {CgDetailsMore, FcCheckmark, GoInfo, HiOutlineMinus, MdNetworkWifi} from "react-icons/all";
-import {ListNested} from "react-bootstrap-icons";
+import {
+    CgDetailsMore,
+    FcCheckmark,
+    GoInfo,
+    HiOutlineMinus, ImStarEmpty,
+    MdFavoriteBorder,
+    MdNetworkWifi,
+    MdOutlineFavoriteBorder
+} from "react-icons/all";
+import {ListNested, Star, StarFill} from "react-bootstrap-icons";
 
 /**
  * Renders single game object for testing purpose
@@ -39,7 +47,7 @@ import {ListNested} from "react-bootstrap-icons";
  */
 const ExampleGame = () => {
 
-    const {data: game} = useClientData('/games', allFields + 'w id=1020;') //19565 // 145505
+    const {data: game} = useClientData('/games', allFields + 'w slug="grand-theft-auto-v";') //19565 // 145505
 
     checkData(game)
 
@@ -47,192 +55,67 @@ const ExampleGame = () => {
 
         <div className="App bg-white">
 
-            {/** Hero **/}
+            {/** Banner **/}
             <Container className="px-0">
 
-                {/** Hero image **/}
-                <Row className="text-start text-white px-5"
-                style={{
-                backgroundImage: `url(https:${game.screenshots
-                    ? screenshotResize(game.screenshots[0].url)
-                    : null
-                })`,
-                backgroundSize : "cover",
-                height : "auto",
-            }}>
+                {/** Banner image **/}
+                <Row className="text-lg-start text-white px-5"
+                     style={{
+                         backgroundImage: `url(https:${game.screenshots
+                             ? upscale(game.screenshots[0].url)
+                             : null})`,
+                         backgroundSize: "cover",
+                         height: "auto",
+                     }}>
+                    {/** Info overlay **/}
+                    <Col lg={12} className="py-4">
+                        <Row className="py-2" style={{backgroundColor: 'rgba(0, 0, 0, 0.6)'}}>
+
+                            <Col md={"auto"}>
+                                <Image src={game.cover && resize(game.cover.url)} className="border border-white"
+                                       style={{height: "27vh"}}/>
+
+                            </Col>
 
 
-                <Col lg={12} className="align-self-center py-4">
+                            <Col md={7} className="align-self-end">
+                                <Row>
+                                    <Col>
 
-                    <Row className="py-2" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}>
+                                        <h1 style={{
+                                            fontSize: "4vh",
+                                            textShadow: "3px 3px #000000",
+                                            borderBottom: "1px solid white"
+                                        }}>{game.name}</h1>
 
-                        <Col md={"auto"}>
-                            <Image src={game.cover && resize(game.cover.url)} className="border border-white" style={{height : "33vh"}}/>
-                        </Col>
+                                        {game.first_release_date && (
+                                        <Row className="py-4"><span style={{fontSize: "1.3em"}}>
+                                            <FaCalendarAlt/> {convertDate(game.first_release_date)}
+                                        </span></Row>
+                                        )}
 
-                        <Col md={6}>
-                            <Row>
-                                <Col>
-                                    <h1 style={{textShadow: "3px 3px #000000", borderBottom : "1px solid white"}}>{game.name}</h1>
-                                    <Row className="py-4"><h6><FaCalendarAlt/> {game.first_release_date && convertTime(game.first_release_date)}</h6></Row>
-                                    <Row><h6><FaTheaterMasks/> {game.genres && game.genres.map((genres, index) => (
-                                        <Link className="text-decoration-none" to={`/game/id/${genres.id}`}>
-                                            <span className="text-white">{(index ? ', ' : '') + genres.name}</span>
-                                        </Link>
-                                    ))}</h6></Row>
-                                </Col>
+                                        {game.genres && (
+                                        <Row><span style={{fontSize: "1.4em"}}>
+                                            <FaTheaterMasks/> {game.genres.map((genres) => (
+                                            <Link className="mx-1 text-decoration-none" to={`/game/id/${genres.id}`}>
+                                                <Badge pill bg={"myPill"} className="text-white">{genres.name}</Badge>
+                                            </Link>
+                                        ))}</span></Row>
+                                        )}
 
-                            </Row>
-                        </Col>
-                    </Row>
-                {/*<Row className="p-0"
-                    style={{
-                        backgroundImage: `url(https:${game.screenshots 
-                            ? screenshotResize(game.screenshots[0].url) 
-                            : null
-                        })`,
-                        backgroundSize: "cover",
-                        height: "35vh",
-                        boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.7)",
-                        color : "white",
-                    }}>
+                                    </Col>
+                                </Row>
+                            </Col>
 
-                    * Cover, title, release date and rating *
-                    <Col className="align-self-center" lg={12}>
+                            <Col md={"auto"} style={{marginLeft : "auto", paddingRight : "1vw"}}>
+                                <Row>
+                                    <span className="fs-2"><ImStarEmpty style={{verticalAlign: 'baseline'}}/></span>
+                                </Row>
+                            </Col>
 
-                        <Container>
-
-                            * Cover image *
-                            <Row className="align-items-center">
-                                <Col md="auto">
-                                    <Image fluid
-                                           src={resize(game.cover.url && game.cover.url)} rounded
-                                           style={{
-                                               marginBottom: "10px",
-                                               boxShadow: "4px 2px 2px 2px black",
-                                               WebkitBoxShadow: "2px 2px 2px 2px black",
-                                               border: "0.7px solid white",
-                                               height: "25vmin"
-                                           }}/>
-                                </Col>
-
-                                * Title *
-                                <Col md={7} className="text-start">
-                                    <Row className="pb-3 mb-4">
-                                        <span style={{
-                                            textShadow: "2px 2px #000000",
-                                            fontSize: "2.5vmax",
-                                      }}>{game.name}</span>
-                                    </Row>
-
-                                    * First release date *
-                                    {game.first_release_date && (
-
-                                        <OverlayTrigger trigger={"click"} placement={"bottom"}  overlay={
-                                            <Popover id={'alldates'}>
-                                                <PopoverHeader as={"h4"}>Release Dates</PopoverHeader>
-                                                <PopoverBody>
-                                                    <ListGroup variant={"flush"}>
-                                                        {game.release_dates && game.release_dates.map(date => (
-                                                            <ListGroupItem>
-                                                                {date.platform.name}: {date.human}
-                                                            </ListGroupItem>
-                                                        ))}
-                                                    </ListGroup>
-                                                </PopoverBody>
-                                            </Popover>
-                                        }>
-                                            <Badge className="p-2 border border-light" style={{fontSize : "1.5vmin"}} bg="myPill">
-                                                <FaCalendarAlt/>
-                                                {" "}<>{convertTime(game.first_release_date)}</>
-                                            </Badge>
-                                        </OverlayTrigger>
-                                    )}
-
-
-                                    * Genres *
-                                    <Row className="mt-3">
-                                        <Col style={{fontSize : "1.8vmin"}}>
-                                            <Badge bg="dark" className="p-2"><FaTheaterMasks/> {" "}
-                                                {game.genres && game.genres.map((genres, index) => (
-                                                    <Link className="text-decoration-none" to={`/game/id/${genres.id}`}>
-                                                        <span className="text-white">{ (index ? ', ' : '') + genres.name}</span>
-                                                    </Link>
-                                                ))}
-                                            </Badge>
-                                        </Col>
-                                    </Row>
-
-                                </Col>
-
-                                * Rating SVG *
-                                <Col className="align-self-center">
-                                    <svg>
-                                        <defs>
-
-                                            <radialGradient id="myGradient">
-                                                <stop offset="20%" stopColor="#141e30" />
-                                                <stop offset="80%" stopColor="black" />
-                                            </radialGradient>
-
-                                            <linearGradient id="medium" x1="0" y1="0" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
-
-                                                <stop offset="0" stopColor="#d3e65c" />
-
-                                                <stop offset="0.2" stopColor="#d9e35a" />
-
-                                                <stop offset="0.4" stopColor="#e5dc56" />
-
-                                                <stop offset="0.6000000000000001" stopColor="#f2d356" />
-
-                                                <stop offset="0.8" stopColor="#fbcb58" />
-
-                                                <stop offset="1" stopColor="#ffc859" />
-                                            </linearGradient>
-
-                                            <linearGradient id="best" x1="0" y1="0" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
-
-                                                <stop offset="0" stopColor="#54de10" />
-
-                                                <stop offset="0.16666666666666666" stopColor="#00e55b" />
-
-                                                <stop offset="0.3333333333333333" stopColor="#00e98b" />
-
-                                                <stop offset="0.5" stopColor="#00edb3" />
-
-                                                <stop offset="0.6666666666666666" stopColor="#00efd4" />
-
-                                                <stop offset="0.8333333333333333" stopColor="#00efee" />
-
-                                                <stop offset="1" stopColor="#00eeff" />
-
-                                            </linearGradient>
-
-                                        </defs>
-                                        <circle cx="70" cy="70" r="70"
-                                                stroke="white"
-                                                strokeWidth="1"
-                                                style={{fill : (game.aggregated_rating >= 75) ? "url(#best)" : "url(#myGradient)"}}
-                                        />
-                                        <text x="70" y="90"
-                                              textAnchor="middle"
-                                              fontSize="30px"
-                                              fill="white"
-                                              alignmentBaseline="middle">
-                                            <tspan y="80" style={{textShadow: "1px 1px #000000",}}>{game.aggregated_rating && convertScore(game.aggregated_rating)}</tspan>
-                                            <tspan fontSize="14px" x="70" dy="2em">{game.aggregated_rating_count && game.aggregated_rating_count} votes</tspan>
-                                        </text>
-                                    </svg>
-
-                                </Col>
-
-
-                            </Row>
-                        </Container>
+                        </Row>
                     </Col>
 
-                </Row>*/}
-                </Col>
                 </Row>
             </Container>
 
@@ -247,6 +130,25 @@ const ExampleGame = () => {
                     <Col md={8} className="px-0">
 
                         <Row className="text-sm-start py-2" style={{fontSize: "16px"}}>
+
+
+                            {game.total_rating && (
+                                <ContentCard title={""}
+                                             props={
+                                                 <>
+                                                     <Row>
+                                                         <Col md={4}>
+                                                             Rating {rateColor(game.total_rating)}
+                                                         </Col>
+                                                     </Row>
+
+                                                     <Row>
+                                                         <span>{game.total_rating_count} votes </span>
+                                                     </Row>
+
+                                                 </>
+                                             }/>
+                            )}
 
                             {/** Summary **/}
                             {game.summary && (
@@ -269,7 +171,7 @@ const ExampleGame = () => {
                                     <Carousel>
                                     {game.screenshots.map(image => (
                                         <CarouselItem>
-                                            <Image src={image.url && screenshotResize(image.url)} fluid/>
+                                            <Image src={image.url && upscale(image.url)} fluid/>
                                         </CarouselItem>
                                     ))}
                                 </Carousel>
@@ -477,7 +379,7 @@ const ExampleGame = () => {
                                         <h4>DLCs </h4>
                                         {game.dlcs.map(dlc => (
                                             <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
-                                                <Link to={`/game/id/${dlc.id}`}>
+                                                <Link to={`/game/${dlc.slug}`}>
                                                     <Card.Img style={{height : "170px"}} src={dlc.cover && resize(dlc.cover.url)}
                                                     />
                                                     <Card.Body className="p-1">
@@ -499,7 +401,7 @@ const ExampleGame = () => {
                                         <h4>Expansions </h4>
                                         {game.expansions.map(exp => (
                                             <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
-                                                <Link to={`/game/id/${exp.id}`}>
+                                                <Link to={`/game/${exp.slug}`}>
                                                     <CardImg style={{height : "170px"}} src={exp.cover.url && resize(exp.cover.url)}/>
                                                     <Card.Body className="p-1">
                                                         <Card.Text style={{fontSize : "12px"}}>{exp.name}</Card.Text>
@@ -520,7 +422,7 @@ const ExampleGame = () => {
                                         <h4>Expansions </h4>
                                         {game.expanded_games.map(exp => (
                                             <Card className="text-center mx-3 p-0"  style={{width : "130px"}}>
-                                                <Link to={`/game/id/${exp.id}`}>
+                                                <Link to={`/game/${exp.slug}`}>
                                                     <CardImg style={{height : "170px"}} src={exp.cover.url && resize(exp.cover.url)}/>
                                                     <Card.Body className="p-1">
                                                         <Card.Text style={{fontSize : "12px"}}>{exp.name}</Card.Text>
@@ -545,7 +447,7 @@ const ExampleGame = () => {
                                             <h5>Similar Games</h5>
                                             {game.similar_games.map(sim => (
                                                 <Col md={2}>
-                                                    <Link className="text-decoration-none" to={`/game/id/${sim.id}`}>
+                                                    <Link className="text-decoration-none" to={`/game/${sim.slug}`}>
                                                         <Image style={{
                                                             width: "5vw",
                                                             borderStyle : "double",

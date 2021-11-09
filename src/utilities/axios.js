@@ -63,14 +63,15 @@ export const useClientData = (url, fields) => {
  */
 export const allFields =
     "f alternative_names.*, artworks.url, aggregated_rating, aggregated_rating_count, age_ratings.rating," +
-    "age_ratings.synopsis, age_ratings.content_descriptions.description, cover.url, category, collection.*, collection.games.*," +
-    "collection.games.cover.*, dlcs.*, dlcs.cover.*, expanded_games.*, expanded_games.cover.*," +
-    " expansions.*, expansions.cover.url, first_release_date, franchises.name, game_modes.name, genres.name, " +
-    "id, involved_companies.company.name, multiplayer_modes.*," +
+    "age_ratings.synopsis, age_ratings.content_descriptions.description, alternative_names.*, cover.url, category, collection.*, collection.games.*," +
+    "collection.games.cover.*, dlcs.*, dlcs.cover.*, dlcs.slug, expanded_games.*, expanded_games.slug, expanded_games.cover.*," +
+    " expansions.*, expansions.slug, expansions.cover.url, first_release_date, franchises.name, game_modes.name, genres.name, " +
+    "game_engines.*, id, involved_companies.company.name, multiplayer_modes.*," +
     "name, platforms.name, platforms.abbreviation, platforms.platform_logo.url, platforms.slug," +
-    "player_perspectives.name, release_dates.*, release_dates.platform.*," +
-    "similar_games.name, similar_games.id," +
-    "summary, similar_games.cover.url, screenshots.url, storyline, themes.name;";
+    "player_perspectives.name, ports.*, release_dates.*, release_dates.platform.*," +
+    "similar_games.name, similar_games.id, similar_games.slug," +
+    "summary, similar_games.cover.url, screenshots.url, storyline, themes.name, " +
+    "total_rating, total_rating, total_rating_count, version_title, videos.*, websites.*;";
 
 
 /**
