@@ -3,6 +3,10 @@
   padding-top: 2px;
 }
 
+.bg-blackGloss {
+  background: #000000;
+  background: linear-gradient(180deg,#000000 0%, rgba(0,0,0,0.81) 80%);}
+
 
 .white {color: white}
 .green {color : green}

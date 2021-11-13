@@ -102,6 +102,11 @@ export function upscale(input) {
 }
 
 
+export function randomImage(input) {
+    return Math.floor(Math.random() * input.length);
+}
+
+
 /**
  * Checks if key-value pair of object is missing in dataset
  * @param obj object to check

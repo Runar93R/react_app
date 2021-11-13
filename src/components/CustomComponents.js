@@ -49,7 +49,7 @@ export const ContentRow = ({title, props}) => {
  */
 export const ContentCol = ({title, icon, props}) => {
     return(
-        <Col className="p-4 my-4 text-lg-center" md={4}>
+        <Col className="border text-lg-center" lg={4}>
             <Row>
                 <h5>{title} {icon}</h5></Row>
             <Row>
@@ -70,7 +70,7 @@ export const MetaCol = ({title, icon, props}) => {
     return (
         <Col lg={3} className="mb-5">
             <Row>
-                <Col><span style={{color : "rgba(63,63,63,0.88)"}}>{title} {icon}</span></Col>
+                <Col><span style={{fontSize : "20px", color : "rgba(63,63,63,0.88)"}}>{title} {icon}</span></Col>
             </Row>
 
             <Row className="pt-2">
@@ -79,6 +79,18 @@ export const MetaCol = ({title, icon, props}) => {
                 </Col>
             </Row>
         </Col>
+    )
+}
+
+export const GameCover = ({props}) => {
+    return(
+        <Image src={props}
+               className="border border-white"
+               style={{
+                   maxHeight : "20vh",
+                   boxShadow : " 6px 4px 6px 4px rgba(0,0,0,0.78)"
+                }}
+        />
     )
 }
 
@@ -149,7 +161,7 @@ export const GameInfoRow = ({title, icon, props}) => {
     return(
 
     <Row className="text-lg-start py-3">
-        <Col md={4}>{icon} {title}</Col>
+        <Col md={6}>{icon} {title}</Col>
         <Col>{props}</Col>
     </Row>
     )
